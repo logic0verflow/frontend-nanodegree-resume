@@ -7,8 +7,8 @@ var bio = {
 		"github": "logic0verflow",
 		"location": "Albuquerque, NM 87108"
 	},
-	"bioPic": "images/portrait.jpeg",
-	"welcomeMsg": "Hello and welcome to my online resume page!",
+	"biopic": "images/portrait.jpeg",
+	"welcomeMessage": "Hello and welcome to my online resume page!",
 	"skills": ["Python", "HTML/CSS/Javascript", "Linux"]
 };
 
@@ -19,21 +19,12 @@ bio.display = function () {
 	var formattedEmail = HTMLemail.replace("%data%", bio.contacts.email);
 	var formattedGithub = HTMLgithub.replace("%data%", bio.contacts.github);
 	var formattedLocation = HTMLlocation.replace("%data%", bio.contacts.location);
-	var formattedBioPic = HTMLbioPic.replace("%data%", bio.bioPic);
-	var formattedWelcomeMsg = HTMLwelcomeMsg.replace("%data%", bio.welcomeMsg);
+	var formattedBioPic = HTMLbioPic.replace("%data%", bio.biopic);
+	var formattedWelcomeMsg = HTMLwelcomeMsg.replace("%data%", bio.welcomeMessage);
 
-	$("#header").prepend(formattedRole);
-	$("#header").prepend(formattedName);
-	$("#topContacts").append(formattedMobile);
-	$("#topContacts").append(formattedEmail);
-	$("#topContacts").append(formattedGithub);
-	$("#topContacts").append(formattedLocation);
-	$("#footerContacts").append(formattedMobile);
-	$("#footerContacts").append(formattedEmail);
-	$("#footerContacts").append(formattedGithub);
-	$("#footerContacts").append(formattedLocation);
-	$("#header").append(formattedBioPic);
-	$("#header").append(formattedWelcomeMsg);
+	$("#header").prepend(formattedName, formattedRole);
+	$("#topContacts, #footerContacts").append(formattedLocation, formattedGithub, formattedEmail, formattedMobile);
+	$("#header").append(formattedBioPic, formattedWelcomeMsg);
 
 	if (bio.skills.length > 0) {
 		$("#header").append(HTMLskillsStart);
@@ -74,9 +65,7 @@ work.display = function () {
 
 		$("#workExperience").append(HTMLworkStart);
 		$(".work-entry:last").append(formattedEmployer + formattedTitle);
-		$(".work-entry:last").append(formattedDates);
-		$(".work-entry:last").append(formattedLocation);
-		$(".work-entry:last").append(formattedDescription);
+		$(".work-entry:last").append(formattedDates, formattedLocation, formattedDescription);
 	}
 };
 
@@ -87,7 +76,7 @@ var education = {
 			"dates": "2008-2016",
 			"location": "Albuquerque, NM 87106",
 			"degree": "Bachelor of Science in Computer Science",
-			"major": "Computer Science",
+			"majors": ["Computer Science"],
 		}
 	],
 
@@ -95,7 +84,7 @@ var education = {
 		{
 			"title": "Udacity - Free Online Classes &amp; Nanodegrees",
 			"dates": "2017-present",
-			"URL": "https://www.udacity.com/",
+			"url": "https://www.udacity.com/",
 			"school": "Front-End Web Developer Nanodegree Program"
 		}
 	]
@@ -103,7 +92,7 @@ var education = {
 
 education.display = function () {
 	// School variables
-	var formattedName, formattedDates, formattedLocation, formattedDegree, formattedMajor;
+	var formattedName, formattedDates, formattedLocation, formattedDegree, formattedMajors;
 
 	// Online Courses Variables
 	var currCourse;
@@ -117,13 +106,11 @@ education.display = function () {
 		formattedDates = HTMLschoolDates.replace("%data%", currSchool.dates);
 		formattedLocation = HTMLschoolLocation.replace("%data%", currSchool.location);
 		formattedDegree = HTMLschoolDegree.replace("%data%", currSchool.degree);
-		formattedMajor = HTMLschoolMajor.replace("%data%", currSchool.major);
+		formattedMajors = HTMLschoolMajor.replace("%data%", currSchool.majors);
 
 		$("#education").append(HTMLschoolStart);
 		$(".education-entry:last").append(formattedName + formattedDegree);
-		$(".education-entry:last").append(formattedDates);
-		$(".education-entry:last").append(formattedLocation);
-		$(".education-entry:last").append(formattedMajor);
+		$(".education-entry:last").append(formattedDates, formattedLocation, formattedMajors);
 	}
 
 	for (i = 0; i < education.onlineCourses.length; i++) {
@@ -131,14 +118,13 @@ education.display = function () {
 
 		formattedTitle = HTMLonlineTitle.replace('%data%', currCourse.title);
 		formattedDates = HTMLonlineDates.replace('%data%', currCourse.dates);
-		formattedURL = HTMLonlineURL.replace('%data%', currCourse.URL);
+		formattedURL = HTMLonlineURL.replace('%data%', currCourse.url);
 		formattedSchool = HTMLonlineSchool.replace('%data%', currCourse.school);
 
 		$("#education").append(HTMLschoolStart);
 		$(".education-entry:last").append(formattedTitle + formattedSchool);
-		$(".education-entry:last").append(formattedDates);
-		$(".education-entry:last").append(formattedURL);
-		$(".education-entry:last").find('a:last').attr('href', currCourse.URL);
+		$(".education-entry:last").append(formattedDates, formattedURL);
+		$(".education-entry:last").find('a:last').attr('href', currCourse.url);
 	}
 };
 
@@ -176,9 +162,7 @@ projects.display = function () {
 		var formattedDesc = HTMLprojectDescription.replace("%data%", currProject.description);
 
 		$("#projects").append(HTMLprojectStart);
-		$(".project-entry:last").append(formattedTitle);
-		$(".project-entry:last").append(formattedDates);
-		$(".project-entry:last").append(formattedDesc);
+		$(".project-entry:last").append(formattedTitle, formattedDates, formattedDesc);
 
 		for (var j = 0; j < currProject.images.length; j++) 	{
 			var formattedImage = HTMLprojectImage.replace("%data%", currProject.images[j]);
@@ -196,6 +180,7 @@ education.display();
 
 $("#main").append(internationalizeButton);
 
+// Internationalizes the name in the header by making all the characters in the last name uppercase
 function inName(name) {
 	var names = name.split(" ");
 	names[1] = names[1].toUpperCase();
